@@ -4,6 +4,8 @@ from django.db.models import F
 
 def index(request):
     return render(request, 'index.html')
+def session(request):
+    return render(request, 'session.html')
 
 def query_results(request):
     if request.method == 'POST':

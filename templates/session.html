@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Session</title>
+</head>
+<body>
+    <h1>Session</h1>
+<form method="post" action="{% url 'query_results' %}">
+    {% csrf_token %}
+
+    <div>
+        <label for="course">Enter Course:</label>
+        <input type="text" id="course" name="course" required>
+    </div>
+
+    <div>
+        <label for="course">Enter Semester [Ex: F23, S23]:</label>
+        <input type="text" id="course" name="course" required>
+    </div>
+
+    <div class="form-row">
+        <label for="date">Enter Date:</label>
+        <input type="date" id="date" name="date" required>
+    </div>
+
+    <div class="form-row">
+        <label for="time">Enter Hours:</label>
+        <input type="number" id="hours" name="hours" step="0.01" required>
+    </div>
+
+    <div class="form-row checkboxes">
+        <label for="inperson" class="checkbox-label">In-Person:</label>
+        <input type="checkbox" id="inperson" name="inperson">
+        <label for="total" class="checkbox-label">Total:</label>
+        <input type="checkbox" id="total" name="total">
+    </div>
+
+    <button type="submit">Submit</button>
+</form>
+</body>
+
+</html>
