@@ -4,13 +4,10 @@ from django.db.models import F
 
 def index(request):
     return render(request, 'index.html')
-<<<<<<< Updated upstream
-def session(request):
-    return render(request, 'session.html')
-=======
 def page25(request):
     return render(request, '25.html')
->>>>>>> Stashed changes
+def addTutor(request):
+    return render(request, 'addTutor.html')
 
 def query_results(request):
     if request.method == 'POST':
