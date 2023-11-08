@@ -5,6 +5,11 @@
     <style>
         form {
             max-width: 450px; /* Adjust width as needed */
+            margin: 0 auto; /* Centers the form horizontally */
+            padding: 20px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            background-color: #f9f9f9;
         }
 
         label, input, button {
@@ -26,6 +31,9 @@
 
         .form-row input {
             flex: 2;
+            padding: 5px;
+            border: 1px solid #ccc;
+            border-radius: 3px;
         }
 
         .checkboxes {
@@ -40,6 +48,15 @@
 
         button {
             padding: 8px;
+            background-color: #007bff;
+            color: #fff;
+            border: none;
+            border-radius: 3px;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background-color: #0056b3;
         }
     </style>
 </head>
@@ -51,13 +68,12 @@
             <input type="text" id="name" name="name" required>
         </div>
 
-        
         <div class="form-row">
             <label for="date">Enter Date:</label>
             <input type="date" id="date" name="date" required>
         </div>
 
-        
+        <button type="submit">Submit</button>
     </form>
 </body>
 </html>
