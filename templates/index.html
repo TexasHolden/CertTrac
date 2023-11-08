@@ -45,7 +45,7 @@
 </head>
 <body>
     <form method="post" action="{% url 'query_results' %}">
-        {% csrf_token %}
+        
         <div class="form-row">
             <label for="name">Enter Name:</label>
             <input type="text" id="name" name="name" required>
