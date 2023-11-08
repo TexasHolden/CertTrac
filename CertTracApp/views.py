@@ -6,6 +6,8 @@ def index(request):
     return render(request, 'index.html')
 def page25(request):
     return render(request, '25.html')
+def addTutor(request):
+    return render(request, 'addTutor.html')
 def help(request):
     return render(request, 'help.html')
 

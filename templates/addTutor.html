@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Session</title>
+</head>
+<body>
+    <h1>Add Tutor</h1>
+<form method="post" action="{% url 'query_results' %}">
+    {% csrf_token %}
+    <div class="form-row">
+        <label for="name">Enter Name:</label>
+        <input type="text" id="name" name="name" required>
+    </div>
+
+    <div class="form-row">
+        <label for="hire-date">Enter Date Hired:</label>
+        <input type="date" id="date" name="date" required>
+    </div>
+
+    <div class="form-row">
+        <label for="email">Enter Email:</label>
+        <input type="text" id="email" name="email" required>
+    </div>
+
+    <button type="submit">Submit</button>
+</form>
+</body>
+
+</html>
