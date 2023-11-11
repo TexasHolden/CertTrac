@@ -105,3 +105,61 @@ def get_course_level(name):
     course = Course.objects.get(name = name)
     return course.level
 
+# View/Edit Tutor Hours
+def view_edit_tutor_hours(request):
+    if request.method == 'POST':
+        # Assume you have a form to edit hours, handle the form submission here
+        # Process the form data and update the database
+        # Redirect to a new URL:
+        return redirect('view_edit_tutor_hours')
+    else:
+        # Fetch the tutor hours data from the database
+        tutor_hours = TutorHours.objects.all()  # Example model and method
+        context = {'tutor_hours': tutor_hours}
+        return render(request, 'view_edit_tutor_hours.html', context)
+
+# Input Hours
+def input_hours(request):
+    if request.method == 'POST':
+        # Handle hours input form submission
+        # Save the new hours to the database
+        # Redirect to a new URL or the same page to show a success message
+        return redirect('input_hours')
+    else:
+        # Provide a blank form for inputting hours
+        form = HoursForm()  # Example form
+        context = {'form': form}
+        return render(request, 'input_hours.html', context)
+
+# Input Completed Courses
+def input_completed_courses(request):
+    if request.method == 'POST':
+        # Handle completed courses form submission
+        # Update the database with the completed courses
+        # Redirect to show success message
+        return redirect('input_completed_courses')
+    else:
+        # Provide a blank form for inputting completed courses
+        form = CompletedCoursesForm()  # Example form
+        context = {'form': form}
+        return render(request, 'input_completed_courses.html', context)
+
+# Add/Remove Tutors
+def add_remove_tutors(request):
+    if request.method == 'POST':
+        # Handle adding or removing tutors based on the form submission
+        # Update the database accordingly
+        # Redirect after the operation
+        return redirect('add_remove_tutors')
+    else:
+        # Fetch the current list of tutors to display
+        tutors = Tutor.objects.all()  # Example model and method
+        # Provide forms for adding and removing tutors
+        add_form = AddTutorForm()  # Example form
+        remove_form = RemoveTutorForm()  # Example form
+        context = {
+            'tutors': tutors,
+            'add_form': add_form,
+            'remove_form': remove_form
+        }
+        return render(request, 'add_remove_tutors.html', context)
