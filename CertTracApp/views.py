@@ -1,262 +1,213 @@
-from django.shortcuts import render, get_object_or_404, redirect
-from .models import Tutor, Takes, Subtopic, Session
-from .forms import TutorForm, TutorSearchForm, TakesForm, SearchTakesForm
+from django.shortcuts import render, redirect, get_object_or_404
+from .models import Tutor, Takes, Course, TutorHours
+from django.db.models import F
+from .forms import TutorHoursForm
 from datetime import datetime
-
-from utils import get_tutor_id, get_course_id, count_courses
-from update_hours import add_hours
-
 
 def index(request):
     return render(request, 'index.html')
-   
-
+def page25(request):
+    return render(request, '25.html')
 def addTutor(request):
     return render(request, 'addTutor.html')
-
-
 def help(request):
     return render(request, 'help.html')
 
-
-def add_subtopic_session(request):
-    return render(request, 'session.html')
-
-
-def add_25_logged_hours(request):
-    if request.method == 'POST':
-        name = request.POST.get('name')
-        date = request.POST.get('date')
-
-        tid = get_tutor_id(name)
-        tutor = get_object_or_404(Tutor, id = tid)
-
-        request.session['tutor_id'] = tutor.id
-
-        date = datetime.strptime(date, '%Y-%m-%d').date()
-
-        if tutor.logged_25_hours_level_1 is None:
-            Tutor.objects.filter(id = tid).update(logged_25_hours_level_1 = date)
-
-        elif tutor.logged_25_hours_level_2 is None:
-            Tutor.objects.filter(id  = tid).update(logged_25_hours_level_2 = date)
-            
-        return update_level_logic(request, 'add_hours')
-
-    return render(request, '25.html')
-
-
-def add_tutor_session(request):
+def query_results(request):
     if request.method == 'POST':
         #Data From Web Page# 
         name = request.POST.get('name')
         course = request.POST.get('course')
         time = request.POST.get('time')
-        #in_person = request.POST.get('inperson')
-        #total = request.POST.get('total')
+        in_person = request.POST.get('inperson')
+        total = request.POST.get('total')
         date = request.POST.get('date')
 
-        tid = get_tutor_id(name)
-
-        # Retrieve the Tutor instance
-        tutor = get_object_or_404(Tutor, id = tid)
-
-        # Store tutor information in the session
-        request.session['tutor_id'] = tutor.id
+        id = get_tutor_id(name)
 
         #Update Queries#
-        add_hours(name, course, date, time, 0)
+        add_hours(name, course, time, in_person, total)
 
-        date = datetime.strptime(date, '%Y-%m-%d').date()
+        #Print To Web Page#
+        #Tutor Information#
+        tutors = Tutor.objects.filter(id = id).values()
 
-        semester = 'S' if date.month in (1, 2, 3, 4, 5) else 'F'
-        semester += str(date.year % 100)
+        #Takes Table Crossed With Session Table#
+        takes_history = Takes.objects.filter(tutor = id).values()
+        takes_history = sorted(takes_history, key=lambda x: x['date'])
+        context = {
+            'tutors': tutors,
+            'takes_history': takes_history,
+        }
 
-        new_takes = Takes(tutor = Tutor.objects.get(id = id), subtopic = Subtopic.objects.get(name = course), semester = semester, date = date)
-        new_takes.save()
+        # Check if string is over a certain limit
+        # If big string, wrap in html
+        # <div style="font-size: 12px (smaller font)"> + {{ item.course }} + </div>
 
-        if course == 'Review of Level 1':
-            Tutor.objects.filter(id = id).update(review_level_1_completed = date)
-
-        count_courses()
-
-        return update_level_logic(request, 'add_hours')
-
-    return render(request, 'index.html')
-
-
-def update_level_logic(request, original_page_name):
-    conditions_met = False 
-
-    tutor_id = request.session.get('tutor_id')
-    tutor = get_object_or_404(Tutor, id = tutor_id)
-
-    if tutor.level == 0:
-        conditions_met = (
-            ((tutor.number_basic_courses_completed_level_1) +
-            (tutor.number_communication_courses_completed_level_1) +
-            (tutor.number_learningstudytechinque_courses_completed_level_1) +
-            (tutor.number_ethicsequality_courses_completed_level_1) +
-            (tutor.number_elective_courses_completed_level_1)) >= 10
-            and (tutor.number_basic_courses_completed_level_1) >= 4
-            and (tutor.number_communication_courses_completed_level_1) >= 2
-            and (tutor.number_learningstudytechinque_courses_completed_level_1) >= 2
-            and (tutor.number_ethicsequality_courses_completed_level_1) >= 1
-            and (tutor.number_elective_courses_completed_level_1) >= 1
-            and (tutor.level_1_hours_in_person) >= 5
-            and (tutor.level_1_hours) >= 10
-            and (tutor.logged_25_hours_level_1)
-        )
-    if tutor.level == 1:
-        conditions_met = (
-            (tutor.number_basic_courses_completed_level_2 +
-            tutor.number_communication_courses_completed_level_2 +
-            tutor.number_learningstudytechinque_courses_completed_level_2 +
-            tutor.number_ethicsequality_courses_completed_level_2 +
-            tutor.number_elective_courses_completed_level_2) >= 10
-            and tutor.number_basic_courses_completed_level_2 >= 3
-            and tutor.number_communication_courses_completed_level_2 >= 2
-            and tutor.number_learningstudytechinque_courses_completed_level_2 >= 3
-            and tutor.number_ethicsequality_courses_completed_level_2 >= 1
-            and tutor.number_elective_courses_completed_level_2 >= 1
-            and tutor.level_2_hours_in_person >= 5
-            and tutor.level_2_hours >= 10
-            and tutor.logged_25_hours_level_2
-            and tutor.review_level_1_completed
-        )
-
-    if conditions_met:
-        # Store the original page URL in the session
-        request.session['original_page_url'] = request.build_absolute_uri()
-        return render(request, 'update_level.html')
+        return render(request, 'results.html', {'tutors': tutors, 'takes_history' : takes_history})
     else:
-        # If conditions are not met, redirect back to the original page
-        referer = request.META.get('HTTP_REFERER')
-        if referer:
-            return redirect(referer)
-        else:
-            # If referer is not available, redirect to a default page
-            return redirect(original_page_name)  # Redirect to the original page passed as an argument
+        # Handle other request methods as needed
+        return render(request, 'index.html')
+    
+#UPDATE HOURS#
+def add_hours(name, course, time, in_person, total):
+    id = get_tutor_id(name)
+    course_level = get_course_level(course)
 
+    #Update All Level 0 Tutors Because Get Get Level 1 Hours For Both Level 1 and 2 Topics
+    if total:
+        #UPDATE Tutor SET level_1_hours = level_1_hours + time WHERE level = 0 and id = id
+        Tutor.objects.filter(level = 0, id = id).update(level_1_hours = F('level_1_hours') + time)
+    if in_person:
+        #UPDATE Tutor SET level_1_hours_in_person = level_1_hours_in_person + time WHERE level = 0 and id = id
+        Tutor.objects.filter(level = 0, id = id).update(level_1_hours_in_person = F('level_1_hours_in_person') + time)
+    
+    #Update Both Level 1 and 2 Because Level 2 Hours Count For Level 2 Hours For Level 1 Tutors But Post Level 2 For Level 2 Tutors#
+    if course_level == 2:
+        if total:
+            #UPDATE Tutor SET level_2_hours = level_2_hours + time WHERE level = 1 AND id = id
+            Tutor.objects.filter(level = 1, id = id).update(level_2_hours = F('level_2_hours') + time)
+        if in_person:
+            #UPDATE Tutor SET level_2_hours_in_person = level_2_hours_in_person + time WHERE level = 1 AND id = id
+            Tutor.objects.filter(level = 1, id = id).update(level_2_hours_in_person = F('level_2_hours_in_person') + time)
+        #Add Post Level 2 Hours For Level 2 Tutors
+        #UPDATE Tutor SET post_level_2_hours = post_level_2_hours + time WHERE level = 2 AND id = id
+        Tutor.objects.filter(level = 2, id = id).update(post_level_2_hours = F('post_level_2_hours') + time)
 
-def update_level(request):
+#ADD TAKES#
+def add_takes(name, course, date):
+    #get tutor_id
+    #get_course_id
+    #add Takes(tutor_id, course_id, semester, date)
+    pass
+
+#ADD TRAING SESSION#
+def add_session(course, semester, time, in_person, total):
+    #find semester code
+    #add session(course, semester, time, inperson, total)
+    pass
+
+#UPDATE LEVEL#
+    
+#UTILITIES#
+
+def get_tutor_id(name):
+    #Tutor First Last Name#
+    name = name.split(' ')
+    first_name = name[0]; last_name = name[1]
+
+    tutor = Tutor.objects.get(first_name = first_name, last_name = last_name)
+    return tutor.id
+
+def get_course_id(name):
+    course = Course.objects.get(name = name)
+    return course.id
+
+def get_course_level(name):
+    course = Course.objects.get(name = name)
+    return course.level
+
+# View/Edit Tutor Hours
+def view_edit_tutor_hours(request):
     if request.method == 'POST':
-        date = request.POST.get('date')
-        date = datetime.strptime(date, '%Y-%m-%d').date()
-
-        # Retrieve tutor information from the session
-        tutor_id = request.session.get('tutor_id')
-
-        # Assuming the user is a Tutor, retrieve the Tutor instance
-        tutor = get_object_or_404(Tutor, id = tutor_id)
-        print(tutor.first_name)
-
-        if not tutor.level_1_completion_date:
-            tutor.level_1_completion_date = date
-            tutor.level = 1
-        elif not tutor.level_2_completion_date:
-            tutor.level_2_completion_date = date
-            tutor.level = 2
-        tutor.save()
-
-        # Get the original page URL from the session
-        original_page_url = request.session.get('original_page_url')
-
-        # Clear the session variable to avoid using it again
-        request.session.pop('original_page_url', None)
-        request.session.pop('tutor_id', None)
-
-        # Redirect back to the original page or a default page if the URL is not available
-        return redirect(original_page_url) #if original_page_url else redirect('default_page')
-
-    # If accessed directly without a POST request, redirect to the update level page
-    return redirect('update_level_page')
-
-
-def search_tutors(request):
-    if request.method == 'POST':
-        form = TutorSearchForm(request.POST)
-        if form.is_valid():
-            search_query = form.cleaned_data['search_query']
-            search_tokens = search_query.split()  # Split the input into tokens (words)
-            
-            # Filter by both first name and last name using OR conditions
-            tutors = Tutor.objects.none()
-            for token in search_tokens:
-                tutors |= Tutor.objects.filter(
-                    first_name__icontains=token) | Tutor.objects.filter(
-                        last_name__icontains=token)
-
-            return render(request, 'search_tutors_results.html', {'tutors': tutors, 'search_query': search_query})
+        if 'add' in request.POST:
+            # Process the form data to add a new TutorHours entry
+            form = TutorHoursForm(request.POST)
+            if form.is_valid():
+                form.save()
+                return redirect('view_edit_tutor_hours')
+        elif 'edit' in request.POST:
+            # Process the form data to update an existing TutorHours entry
+            tutor_hours_id = request.POST.get('tutor_hours_id')
+            tutor_hours = get_object_or_404(TutorHours, id=tutor_hours_id)
+            form = TutorHoursForm(request.POST, instance=tutor_hours)
+            if form.is_valid():
+                form.save()
+                return redirect('view_edit_tutor_hours')
     else:
-        form = TutorSearchForm()
+        # GET request - display the form and the existing entries
+        # Filtering logic based on the name and cut-off date
+        tutor_hours_list = TutorHours.objects.all()
+        query_name = request.GET.get('tutor_name', '')
+        query_date = request.GET.get('cut_off_date', '')
 
-    return render(request, 'search_tutors.html', {'form': form})
+        if query_name:
+            tutor_hours_list = tutor_hours_list.filter(tutor__name__icontains=query_name)
+        if query_date:
+            cut_off_date = datetime.strptime(query_date, '%Y-%m-%d').date()
+            tutor_hours_list = tutor_hours_list.filter(date__gte=cut_off_date)
 
-
-def edit_tutor(request, tutor_id):
-    # Retrieve the Tutor instance from the database
-    tutor = get_object_or_404(Tutor, id = tutor_id)
-
-    # Check if the request method is POST (form submission)
-    if request.method == 'POST':
-        # Create a form instance with the submitted data and the instance of the Tutor
-        form = TutorForm(request.POST, instance = tutor)
-        if form.is_valid():
-            # Save the form data to the database
+        form = TutorHoursForm()  # An unbound form for adding new entries
+        context = {
+            'tutor_hours_list': tutor_hours_list,
+            'form': form,
+        }
+        return render(request, 'view_edit_tutor_hours.html', context)
+    
+def add_tutor_hours(request):
+        if request.method == 'POST':
+          form = TutorHoursForm(request.POST)
+          if form.is_valid():
             form.save()
-            # Redirect to a success page or wherever you want
-            #return HttpResponseRedirect('/success/')
+            return redirect('view_edit_tutor_hours')
         else:
-            # Print form errors for debugging
-            print(form.errors)
-    else:
-        # If the request method is GET, create a form instance with the Tutor instance
-        form = TutorForm(instance = tutor)
+            form = TutorHoursForm()
+        return render(request, 'view_edit_tutor_hours.html', {'form': form})
 
-    # Render the template with the form
-    return render(request, 'edit_tutor.html', {'form': form, 'tutor': tutor})
-
-
-def search_takes(request):
-    # Handle form submission
+def edit_tutor_hours(request, tutor_hours_id):
+    tutor_hours = get_object_or_404(TutorHours, id=tutor_hours_id)
     if request.method == 'POST':
-        form = SearchTakesForm(request.POST)
-
-        if form.is_valid():
-            tutor = form.cleaned_data['tutor']
-            subtopic = form.cleaned_data['subtopic']
-            date = form.cleaned_data['date']
-
-            tid = get_tutor_id(tutor)
-            cid = get_course_id(subtopic)
-
-            # Filter Takes model based on search parameters
-            takes = Takes.objects.none()
-            takes = Takes.objects.filter(tutor = tid, subtopic = cid, date = date)
-
-            return render(request, 'edit_takes.html', {'takes': takes, 'form': form})
-
-    # If it's a GET request or form is invalid, render the search_takes template with the form
-    else:
-        form = SearchTakesForm()
-
-    return render(request, 'search_takes.html', {'form': form})
-
-
-def edit_takes(request, takes_id):
-    takes = get_object_or_404(Takes, id = takes_id)
-
-    if request.method == 'POST':
-        form = TakesForm(request.POST, instance = takes)
+        form = TutorHoursForm(request.POST, instance=tutor_hours)
         if form.is_valid():
             form.save()
-            # Redirect or do something else upon successful form submission
-            print('Form Changed')
-        else:
-            # Print form errors for debugging
-            print(form.errors)
+            # Redirect to avoid POST data resubmission issues
+            return redirect('view_edit_tutor_hours')
+    # If GET request, display the page with form to edit
+    # Else, if POST but not valid, display form with errors
+    return render(request, 'edit_tutor_hours.html', {'form': form})
+ 
+# Input Hours
+def input_hours(request):
+    if request.method == 'POST':
+        # Handle hours input form submission
+        # Save the new hours to the database
+        # Redirect to a new URL or the same page to show a success message
+        return redirect('input_hours')
     else:
-        form = TakesForm(instance = takes)
+        # Provide a blank form for inputting hours
+        form = HoursForm()  # Example form
+        context = {'form': form}
+        return render(request, 'input_hours.html', context)
 
-    return render(request, 'edit_takes.html', {'form': form, 'takes': takes})
+# Input Completed Courses
+def input_completed_courses(request):
+    if request.method == 'POST':
+        # Handle completed courses form submission
+        # Update the database with the completed courses
+        # Redirect to show success message
+        return redirect('input_completed_courses')
+    else:
+        # Provide a blank form for inputting completed courses
+        form = CompletedCoursesForm()  # Example form
+        context = {'form': form}
+        return render(request, 'input_completed_courses.html', context)
+
+# Add/Remove Tutors
+def add_remove_tutors(request):
+    if request.method == 'POST':
+        # Handle adding or removing tutors based on the form submission
+        # Update the database accordingly
+        # Redirect after the operation
+        return redirect('add_remove_tutors')
+    else:
+        # Fetch the current list of tutors to display
+        tutors = Tutor.objects.all()  # Example model and method
+        # Provide forms for adding and removing tutors
+        add_form = AddTutorForm()  # Example form
+        remove_form = RemoveTutorForm()  # Example form
+        context = {
+            'tutors': tutors,
+            'add_form': add_form,
+            'remove_form': remove_form
+        }
+        return render(request, 'add_remove_tutors.html', context)

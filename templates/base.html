@@ -75,11 +75,10 @@
 <body>
   <nav>
     <ul>
-      <li><a href="{% url 'add_hours' %}" class="{% if request.resolver_match.url_name == 'add_hours' %}active{% endif %}">Add Tutor Hours</a></li>
-      <li><a href="{% url 'page25' %}" class="{% if request.resolver_match.url_name == 'page25' %}active{% endif %}">Add 25 Logged Hours</a></li>
-      <li><a href="{% url 'session' %}" class="{% if request.resolver_match.url_name == 'session' %}active{% endif %}">Add Team Meeting</a></li>
-      <li><a href="{% url 'add_tutor' %}" class="{% if request.resolver_match.url_name == 'add_tutor' %}active{% endif %}">Add Tutors</a></li>
-      <li><a href="{% url 'help' %}" class="{% if request.resolver_match.url_name == 'help' %}active{% endif %}">Help</a></li>
+      <li><a href="{% url 'view_edit_tutor_hours' %}" class="{% if request.resolver_match.url_name == 'view_edit_tutor_hours' %}active{% endif %}">View/Edit Tutor Hours</a></li>
+      <li><a href="{% url 'input_hours' %}" class="{% if request.resolver_match.url_name == 'input_hours' %}active{% endif %}">Input Hours</a></li>
+      <li><a href="{% url 'input_completed_courses' %}" class="{% if request.resolver_match.url_name == 'input_completed_courses' %}active{% endif %}">Input Completed Courses</a></li>
+      <li><a href="{% url 'add_remove_tutors' %}" class="{% if request.resolver_match.url_name == 'add_remove_tutors' %}active{% endif %}">Add/Remove Tutors</a></li>
     </ul>
   </nav>
   <main>
