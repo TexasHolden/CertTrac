@@ -245,3 +245,18 @@ def search_takes(request):
 
 
 def edit_takes(request, takes_id):
+    takes = get_object_or_404(Takes, id = takes_id)
+
+    if request.method == 'POST':
+        form = TakesForm(request.POST, instance = takes)
+        if form.is_valid():
+            form.save()
+            # Redirect or do something else upon successful form submission
+            print('Form Changed')
+        else:
+            # Print form errors for debugging
+            print(form.errors)
+    else:
+        form = TakesForm(instance = takes)
+
+    return render(request, 'edit_takes.html', {'form': form, 'takes': takes})
