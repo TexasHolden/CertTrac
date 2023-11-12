@@ -1,0 +1,18 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<h1>Add/Remove Tutors</h1>
+<!-- The forms for adding or removing tutors will be placed here -->
+<!-- Example form for adding a tutor -->
+<form method="post" action="{% url 'add_tutor' %}">
+    {% csrf_token %}
+    <!-- Form fields for adding a tutor -->
+    <button type="submit">Add Tutor</button>
+</form>
+<!-- Example form for removing a tutor -->
+<form method="post" action="{% url 'remove_tutor' %}">
+    {% csrf_token %}
+    <!-- Form fields for removing a tutor -->
+    <button type="submit">Remove Tutor</button>
+</form>
+{% endblock %}

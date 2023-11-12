@@ -1,4 +1,5 @@
 from django.db import models
+from django.utils import timezone
 
 
 class Tutor(models.Model):
@@ -132,4 +133,12 @@ class TotalTrainingSession(models.Model):
     #in_person_hours = models.DecimalField(max_digits=5, decimal_places=2)
     #total_hours = models.DecimalField(max_digits=5, decimal_places=2)
 
+class TutorHours(models.Model):
+    tutor = models.ForeignKey('Tutor', on_delete=models.CASCADE, related_name='tutor_hours')
+    class_tutored = models.CharField(max_length=100)
+    hours_tutored = models.DecimalField(max_digits=5, decimal_places=2)
+    date = models.DateField(default=timezone.now)
+
+    def __str__(self):
+        return f"{self.tutor.first_name} {self.tutor.last_name} - {self.class_tutored} on {self.date}"
 

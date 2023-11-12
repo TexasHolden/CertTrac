@@ -1,0 +1,100 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container">
+  <h1>View/Edit Tutor Hours</h1>
+
+  <!-- Form to add/search tutor hours entry -->
+  <form method="post" action="{% url 'add_tutor_hours' %}" class="tutor-hours-form">
+      {% csrf_token %}
+      <div class="form-row">
+          <label for="tutor_name" class="form-label">Enter Name:</label>
+          <input type="text" id="tutor_name" name="tutor_name" required class="form-input">
+      </div>
+      <div class="form-row">
+          <label for="class_tutored" class="form-label">Enter Course:</label>
+          <input type="text" id="class_tutored" name="class_tutored" required class="form-input">
+      </div>
+      <div class="form-row">
+          <label for="hours_tutored" class="form-label">Enter Hours:</label>
+          <input type="number" id="hours_tutored" name="hours_tutored" step="0.01" required class="form-input">
+      </div>
+      <div class="form-row">
+          <label for="date" class="form-label">Enter Date:</label>
+          <input type="date" id="date" name="date" required class="form-input">
+      </div>
+      <div class="form-row">
+          <label class="form-label">Total:</label>
+          <input type="checkbox" id="total" name="total" class="form-checkbox">
+          <label for="total" class="form-label-checkbox">In-Person:</label>
+          <input type="checkbox" id="inperson" name="inperson" class="form-checkbox">
+      </div>
+      <button type="submit" name="add" value="add">Add Entry</button>
+  </form>
+  <form method="get" action="{% url 'view_edit_tutor_hours' %}" class="search-form">
+    <div class="form-row">
+        <label for="tutor_name" class="form-label">Tutor Name:</label>
+        <input type="text" id="tutor_name" name="tutor_name" class="form-input">
+    </div>
+    <div class="form-row">
+        <label for="cut_off_date" class="form-label">Cut-off Date:</label>
+        <input type="date" id="cut_off_date" name="cut_off_date" class="form-input">
+    </div>
+    <div class="form-row button-row">
+        <button type="submit" name="action" value="view" class="btn">View</button>
+    </div>
+</form>
+</div>
+
+<style>
+    .container {
+      max-width: 600px;
+      margin: auto;
+      text-align: center;
+    }
+  
+    .search-form, .button-row {
+      text-align: center;
+      margin-bottom: 20px;
+    }
+  
+    .form-row {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      margin-bottom: 10px;
+    }
+  
+    .form-label {
+      min-width: 120px;
+      text-align: right;
+      margin-right: 10px;
+    }
+  
+    .form-input,
+    .form-checkbox {
+      margin-left: 2px;
+      margin-right: 10px;
+    }
+  
+    .form-input {
+      width: 200px;
+    }
+  
+    .btn {
+      padding: 5px 15px;
+    }
+  
+    /* Adjustments for checkbox alignment */
+    .form-checkbox {
+      margin-left: 2px; /* Space between checkbox and label */
+      margin-right: 5px;
+    }
+  
+    .button-row {
+      display: flex;
+      justify-content: center;
+    }
+  </style>
+
+{% endblock %}

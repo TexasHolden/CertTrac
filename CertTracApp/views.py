@@ -1,6 +1,8 @@
-from django.shortcuts import render
-from .models import Tutor, Takes, Course
+from django.shortcuts import render, redirect, get_object_or_404
+from .models import Tutor, Takes, Course, TutorHours
 from django.db.models import F
+from .forms import TutorHoursForm
+from datetime import datetime
 
 def index(request):
     return render(request, 'index.html')
@@ -108,16 +110,62 @@ def get_course_level(name):
 # View/Edit Tutor Hours
 def view_edit_tutor_hours(request):
     if request.method == 'POST':
-        # Assume you have a form to edit hours, handle the form submission here
-        # Process the form data and update the database
-        # Redirect to a new URL:
-        return redirect('view_edit_tutor_hours')
+        if 'add' in request.POST:
+            # Process the form data to add a new TutorHours entry
+            form = TutorHoursForm(request.POST)
+            if form.is_valid():
+                form.save()
+                return redirect('view_edit_tutor_hours')
+        elif 'edit' in request.POST:
+            # Process the form data to update an existing TutorHours entry
+            tutor_hours_id = request.POST.get('tutor_hours_id')
+            tutor_hours = get_object_or_404(TutorHours, id=tutor_hours_id)
+            form = TutorHoursForm(request.POST, instance=tutor_hours)
+            if form.is_valid():
+                form.save()
+                return redirect('view_edit_tutor_hours')
     else:
-        # Fetch the tutor hours data from the database
-        tutor_hours = TutorHours.objects.all()  # Example model and method
-        context = {'tutor_hours': tutor_hours}
-        return render(request, 'view_edit_tutor_hours.html', context)
+        # GET request - display the form and the existing entries
+        # Filtering logic based on the name and cut-off date
+        tutor_hours_list = TutorHours.objects.all()
+        query_name = request.GET.get('tutor_name', '')
+        query_date = request.GET.get('cut_off_date', '')
 
+        if query_name:
+            tutor_hours_list = tutor_hours_list.filter(tutor__name__icontains=query_name)
+        if query_date:
+            cut_off_date = datetime.strptime(query_date, '%Y-%m-%d').date()
+            tutor_hours_list = tutor_hours_list.filter(date__gte=cut_off_date)
+
+        form = TutorHoursForm()  # An unbound form for adding new entries
+        context = {
+            'tutor_hours_list': tutor_hours_list,
+            'form': form,
+        }
+        return render(request, 'view_edit_tutor_hours.html', context)
+    
+def add_tutor_hours(request):
+        if request.method == 'POST':
+          form = TutorHoursForm(request.POST)
+          if form.is_valid():
+            form.save()
+            return redirect('view_edit_tutor_hours')
+        else:
+            form = TutorHoursForm()
+        return render(request, 'view_edit_tutor_hours.html', {'form': form})
+
+def edit_tutor_hours(request, tutor_hours_id):
+    tutor_hours = get_object_or_404(TutorHours, id=tutor_hours_id)
+    if request.method == 'POST':
+        form = TutorHoursForm(request.POST, instance=tutor_hours)
+        if form.is_valid():
+            form.save()
+            # Redirect to avoid POST data resubmission issues
+            return redirect('view_edit_tutor_hours')
+    # If GET request, display the page with form to edit
+    # Else, if POST but not valid, display form with errors
+    return render(request, 'edit_tutor_hours.html', {'form': form})
+ 
 # Input Hours
 def input_hours(request):
     if request.method == 'POST':
