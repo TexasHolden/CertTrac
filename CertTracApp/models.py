@@ -126,9 +126,7 @@ class Session(models.Model):
     This model serves as a record of sessions associated with specific courses, including the semester, in-person hours,
     and asynchronous hours.
     '''
-    sub_topic = models.ForeignKey(SubTopic)
-    semester = models.CharField(max_length=40)
-    in_person_hours = models.DecimalField(max_digits=5, decimal_places=2)
-    total_hours = models.DecimalField(max_digits=5, decimal_places=2)
-
-
+    subtopic = models.ForeignKey(Subtopic, on_delete = models.DO_NOTHING, null = True)
+    semester = models.CharField(max_length=40, null = True)
+    in_person_hours = models.DecimalField(max_digits=5, decimal_places=2, null = True)
+    async_hours = models.DecimalField(max_digits=5, decimal_places=2, null = True)
