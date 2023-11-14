@@ -1,5 +1,6 @@
 from django.urls import path
 from . import views
+from .views import search
 
 urlpatterns = [
     path('', views.index, name='index'),
@@ -9,4 +10,5 @@ urlpatterns = [
     path('addsubtopicsession', views.add_subtopic_session, name = 'session'  ),
     path('add_tutor', views.addTutor, name = 'add_tutor'),
     path('help', views.help, name = 'help'),
+    path('search/', search, name='search'), 
 ]

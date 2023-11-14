@@ -1,83 +1,37 @@
 {% extends 'base.html' %}
 
 {% block content %}
-<!DOCTYPE html>
-<html>
-<head>
-    <title>User Input</title>
-    <style>
-        form {
-            max-width: 450px; /* Adjust width as needed */
-        }
+  <title>User Input</title>
 
-        label, input, button {
-            display: block;
-            margin-bottom: 10px;
-        }
+  <form method="post" action="{% url 'add_hours' %}">
+    {% csrf_token %}
+    <div class="form-row">
+      <label for="name">Enter Name:</label>
+      <input type="text" id="name" name="name" required>
+    </div>
 
-        .form-row {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            margin-bottom: 10px;
-        }
+    <div class="form-row">
+      <label for="course">Enter Course:</label>
+      <input type="text" id="course" name="course" required>
+    </div>
 
-        .form-row label {
-            flex: 1;
-            margin-right: 10px;
-        }
+    <div class="form-row">
+      <label for="hours">Enter Hours:</label>
+      <input type="number" id="hours" name="hours" step="0.01" required>
+    </div>
 
-        .form-row input {
-            flex: 2;
-        }
+    <div class="form-row checkboxes">
+      <label for="inperson" class="checkbox-label">In-Person:</label>
+      <input type="checkbox" id="inperson" name="inperson">
+      <label for="total" class="checkbox-label">Total:</label>
+      <input type="checkbox" id="total" name="total">
+    </div>
 
-        .checkboxes {
-            display: flex;
-            align-items: center;
-            margin-bottom: 10px;
-        }
+    <div class="form-row">
+      <label for="date">Enter Date:</label>
+      <input type="date" id="date" name="date" required>
+    </div>
 
-        .checkbox-label {
-            margin-right: 10px;
-        }
-
-        button {
-            padding: 8px;
-        }
-    </style>
-</head>
-<body>
-    <form method="post" action="{% url 'add_hours' %}">
-        {% csrf_token %}
-        <div class="form-row">
-            <label for="name">Enter Name:</label>
-            <input type="text" id="name" name="name" required>
-        </div>
-
-        <div class="form-row">
-            <label for="course">Enter Course:</label>
-            <input type="text" id="course" name="course" required>
-        </div>
-
-        <div class="form-row">
-            <label for="hours">Enter Hours:</label>
-            <input type="number" id="hours" name="hours" step="0.01" required>
-        </div>
-
-        <div class="form-row checkboxes">
-            <label for="inperson" class="checkbox-label">In-Person:</label>
-            <input type="checkbox" id="inperson" name="inperson">
-            <label for="total" class="checkbox-label">Total:</label>
-            <input type="checkbox" id="total" name="total">
-        </div>
-
-        <div class="form-row">
-            <label for="date">Enter Date:</label>
-            <input type="date" id="date" name="date" required>
-        </div>
-
-        <button type="submit">Search</button>
-    </form>
-</body>
-</html>
+    <button type="submit">Search</button>
+  </form>
 {% endblock %}

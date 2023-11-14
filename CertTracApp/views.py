@@ -260,3 +260,14 @@ def edit_takes(request, takes_id):
         form = TakesForm(instance = takes)
 
     return render(request, 'edit_takes.html', {'form': form, 'takes': takes})
+
+def search(request):
+    query = request.GET.get('q', '')
+    if query:
+        # Perform search operation, e.g., filter your models based on the query
+        # results = YourModel.objects.filter(name__icontains=query)
+        results = []  # Replace with actual search logic
+    else:
+        results = []
+
+    return render(request, 'search_results.html', {'results': results, 'query': query})

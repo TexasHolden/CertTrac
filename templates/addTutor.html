@@ -1,10 +1,10 @@
-<!DOCTYPE html>
-<html>
+{% extends 'base.html' %}
+
+{% block content %}
 <head>
 <title>Session</title>
 </head>
 <body>
-    <h1>Add Tutor</h1>
 <form method="post" action="{% url 'add_tutor' %}">
     {% csrf_token %}
     <div class="form-row">
@@ -24,6 +24,5 @@
 
     <button type="submit">Submit</button>
 </form>
-</body>
 
-</html>
+{% endblock %}
