@@ -3,11 +3,11 @@
 {% block content %}
   <title>User Input</title>
 
-  <form method="post" action="{% url 'add_hours' %}">
+  <form method="post" action="{% url 'add_hours' %}" id="inputHoursForm">
     {% csrf_token %}
     <div class="form-row">
       <label for="name">Enter Name:</label>
-      <input type="text" id="name" name="name" required>
+      <textarea id="names" name="names" required></textarea>
     </div>
 
     <div class="form-row">
@@ -32,6 +32,29 @@
       <input type="date" id="date" name="date" required>
     </div>
 
-    <button type="submit">Search</button>
+    <button type="submit" onclick="submitNames()">Submit</button>
   </form>
+  <script>
+    function submitNames() {
+      const namesInput = document.getElementById('names');
+      const names = namesInput.value.split(',');
+  
+      names.forEach(name => {
+        const formData = new FormData(document.getElementById('inputHoursForm'));
+        formData.set('names', name.trim()); // Set each name in the form data
+  
+        fetch('{% url "add_hours" %}', {
+          method: 'POST',
+          body: formData
+        })
+        .then(response => {
+          // Handle response as needed
+          console.log(`Submitted ${name}`);
+        })
+        .catch(error => {
+          console.error('Error:', error);
+        });
+      });
+    }
+  </script>
 {% endblock %}
