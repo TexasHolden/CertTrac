@@ -1,0 +1,19 @@
+<!-- update_level_page.html -->
+
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Update Level</title>
+    <!-- Your head content here -->
+</head>
+<body>
+    <h1>Update Level</h1>
+    
+    <form method="post" action="{% url 'update_level' %}">
+        {% csrf_token %}
+        <label for="date">Enter Date:</label>
+        <input type="date" id="date" name="date" required pattern="\d{4}-\d{2}-\d{2}" title="Please enter a date in the format YYYY-MM-DD">
+        <br>
+        <button type="submit">Submit</button>
+</body>
+</html>

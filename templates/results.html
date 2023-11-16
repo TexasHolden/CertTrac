@@ -45,7 +45,7 @@
 </head>
 <body>
     <div class = "grid-container">
-    <h1>{% for tutor_info in tutors %}
+    <h1>{% for tutor_info in tutor %}
         {{ tutor_info.first_name }}'s
     {% endfor %}
     Information:
@@ -61,7 +61,7 @@
             <th>Level 1 Completion Date</th>
             <th>Level 2 Completion Date</th>
         </thead>
-        {% for tutor_info in tutors %}
+        {% for tutor_info in tutor %}
         <tr>
             <td>{{ tutor_info.first_name }}</td>
             <td>{{ tutor_info.last_name }}</td>
@@ -90,7 +90,7 @@
             <th>Electives</th>
         </thead>
         <tbody>
-            {% for tutor_info in tutors %}
+            {% for tutor_info in tutor %}
                 <tr>
                     <td>{{ tutor_info.number_basic_courses_completed_level_1 }}</td>
                     <td>{{ tutor_info.number_communication_courses_completed_level_1 }}</td>
@@ -110,7 +110,7 @@
             <th>Logged 25 Hours</th>
         </thead>
         <tbody>
-            {% for tutor_info in tutors %}
+            {% for tutor_info in tutor %}
                 <tr>
                     <td>{{ tutor_info.level_1_hours_in_person }}</td>
                     <td>{{ tutor_info.level_1_hours }}</td>
@@ -133,7 +133,7 @@
             <th>Electives</th>
         </thead>
         <tbody>
-            {% for tutor_info in tutors %}
+            {% for tutor_info in tutor %}
                 <tr>
                     <td>{{ tutor_info.number_basic_courses_completed_level_2 }}</td>
                     <td>{{ tutor_info.number_communication_courses_completed_level_2 }}</td>
@@ -153,7 +153,7 @@
             <th>Logged 25 Hours</th>
         </thead>
         <tbody>
-            {% for tutor_info in tutors %}
+            {% for tutor_info in tutor %}
                 <tr>
                     <td>{{ tutor_info.level_2_hours_in_person }}</td>
                     <td>{{ tutor_info.level_2_hours }}</td>
@@ -169,7 +169,7 @@
 <div class="grid-container">
 
     <h3>Post Level 2 Training Hours Completed:
-        {% for tutor_info in tutors %}
+        {% for tutor_info in tutor %}
             {{ tutor_info.post_level_2_hours }}</td>
         {% endfor %}
     </h3>
@@ -179,24 +179,30 @@
 <hr>
 <div class="grid-container">
 
-    <h1>Sub-Topics Completed:</h1>
-    <table id="subTopicsTable" onclick = "toggleTable()">
+    <h1>Sessions Completed:</h1>
+    <table id="subTopicsTable">
         <thead>
             <tr>
+                <th>Level</th>
+                <th>Topic</th>
                 <th>Sub-Topic</th>
                 <th>Semester</th>
                 <th>Date</th>
                 <th>In-Person Traing Time</th>
-                <th>Total Training Time</th>
+                <th>Asycnronous Training Time</th>
             </tr>
         </thead>
         <tbody>
             <!-- Loop through your data and display it in the table -->
-            {% for item in takes_history %}
+            {% for item in takes %}
                 <tr>
-                    <td>{{ item.course }}</td>
-                    <td>{{ item.semester }}</td>
+                    <td>{{ item.session.subtopic.level }}</td>
+                    <td>{{ item.session.subtopic.topic }}</td>
+                    <td>{{ item.session.subtopic.name }}</td>
+                    <td>{{ item.session.semester }}</td>
                     <td>{{ item.date }}</td>
+                    <td>{{ item.session.in_person_hours }}</td>
+                    <td>{{ item.session.async_hours }}</td>
                 </tr>
             {% endfor %}
         </tbody>

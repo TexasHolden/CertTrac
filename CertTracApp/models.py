@@ -94,25 +94,6 @@ class Subtopic(models.Model):
     topic = models.CharField(max_length=40)
 
 
-class Takes(models.Model):
-    '''
-    Model representing a record of a tutor taking a course.
-
-    Fields:
-        - tutor: A foreign key to the Tutor model, representing the tutor who is taking the course.
-        - subtopic: A foreign key to the Subtopic model, representing the course that the tutor is taking.
-        - semester: The semester when the tutor took the course.
-        - date: The date when the tutor took the course.
-
-    This model serves as a record of tutors taking specific courses on particular dates, establishing a relationship
-    between tutors and courses they have taken.
-    '''
-    tutor = models.ForeignKey(Tutor, on_delete=models.CASCADE)
-    subtopic = models.ForeignKey(Subtopic, on_delete=models.DO_NOTHING)
-    semester = models.CharField(max_length=40)
-    date = models.DateField()
-
-
 class Session(models.Model):
     '''
     Model representing a session with various attributes and information.
@@ -127,6 +108,88 @@ class Session(models.Model):
     and asynchronous hours.
     '''
     subtopic = models.ForeignKey(Subtopic, on_delete = models.DO_NOTHING, null = True)
-    semester = models.CharField(max_length=40, null = True)
-    in_person_hours = models.DecimalField(max_digits=5, decimal_places=2, null = True)
-    async_hours = models.DecimalField(max_digits=5, decimal_places=2, null = True)
+    semester = models.CharField(max_length = 40)
+    in_person_hours = models.DecimalField(max_digits=5, decimal_places=2)
+    async_hours = models.DecimalField(max_digits=5, decimal_places=2)
+
+
+class Takes(models.Model):
+    '''
+    Model representing a record of a tutor taking a session.
+
+    Fields:
+        - tutor: A foreign key to the Tutor model, representing the tutor who is taking the course.
+        - session: A foreign key to the Session model, representing the session that the tutor is taking.
+        - semester: The semester when the tutor took the course.
+        - date: The date when the tutor took the course.
+
+    This model serves as a record of tutors taking specific sessions on particular dates, establishing a relationship
+    between tutors and sessions they have taken.
+    '''
+    tutor = models.ForeignKey(Tutor, on_delete = models.CASCADE)
+    session = models.ForeignKey(Session, on_delete = models.CASCADE)
+    semester = models.CharField(max_length=40)
+    date = models.DateField()
+
+
+'''
+Table Tutor {
+  id integer [primary key]
+  first_name varchar
+    last_name varchar
+    email varchar
+    date_hired varchar
+
+    level_1_hours DecimalField
+    level_1_hours_in_person DecimalField
+    logged_25_hours_level_1 varchar
+    level_1_completion_date varchar
+
+    level_2_hours DecimalField
+    level_2_hours_in_person DecimalField
+    post_level_2_hours varchar
+    level_2_completion_date varchar
+
+    logged_25_hours_level_2 varchar
+
+    number_basic_courses_completed_level_1 integer
+    number_basic_courses_completed_level_2 integer
+
+    number_communication_courses_completed_level_1 integer
+    number_communication_courses_completed_level_2 integer
+
+    number_learningstudytechinque_courses_completed_level_1 integer
+    number_learningstudytechinque_courses_completed_level_2 integer
+
+    number_ethicsequality_courses_completed_level_1 integer
+    number_ethicsequality_courses_completed_level_2 integer
+
+    number_elective_courses_completed_level_1 integer
+    number_elective_courses_completed_level_2 integer
+
+    review_level_1_completed varchar
+}
+
+Table Subtopic {
+  id integer [primary key]
+  name varchar
+  topic varchar
+  level integer
+}
+
+Table Session {
+  id integer [primary key]
+  tutor foreignkey (Tutor_id)
+  subtopic foreignkey (Subtopic)
+  semester varchar
+  in_person_hours DecimalField
+  async_hours DecimalField
+}
+
+Table Takes {
+  id integer [primary key]
+  tutor foreignkey (Tutor)
+  session foreignkey (Session)
+  date varchar
+}
+'''

@@ -51,7 +51,8 @@ def add_tutor_session(request):
         #Data From Web Page# 
         name = request.POST.get('name')
         course = request.POST.get('course')
-        time = request.POST.get('time')
+        semester = 'F23'
+        #time = request.POST.get('time')
         #in_person = request.POST.get('inperson')
         #total = request.POST.get('total')
         date = request.POST.get('date')
@@ -65,14 +66,14 @@ def add_tutor_session(request):
         request.session['tutor_id'] = tutor.id
 
         #Update Queries#
-        add_hours(name, course, date, time, 0)
+        #add_hours(name, course, date, time, 0)
 
         date = datetime.strptime(date, '%Y-%m-%d').date()
 
-        semester = 'S' if date.month in (1, 2, 3, 4, 5) else 'F'
-        semester += str(date.year % 100)
+        #semester = 'S' if date.month in (1, 2, 3, 4, 5) else 'F'
+        #semester += str(date.year % 100)
 
-        new_takes = Takes(tutor = Tutor.objects.get(id = id), subtopic = Subtopic.objects.get(name = course), semester = semester, date = date)
+        new_takes = Takes(tutor = Tutor.objects.get(id = id), sesson = Session.objects.get(subtopic_name = course, semester = semester), date = date)
         new_takes.save()
 
         if course == 'Review of Level 1':
@@ -170,7 +171,7 @@ def update_level(request):
         return redirect(original_page_url) #if original_page_url else redirect('default_page')
 
     # If accessed directly without a POST request, redirect to the update level page
-    return redirect('update_level_page')
+    return redirect('update_level')
 
 
 def search_tutors(request):
@@ -264,10 +265,12 @@ def edit_takes(request, takes_id):
 def search(request):
     query = request.GET.get('q', '')
     if query:
+        tid = get_tutor_id(query)
+        print(tid)
         # Perform search operation, e.g., filter your models based on the query
-        # results = YourModel.objects.filter(name__icontains=query)
-        results = []  # Replace with actual search logic
+        tutor = Tutor.objects.filter(id = tid)
+        takes = Takes.objects.filter(tutor_id = tid)
     else:
         results = []
 
-    return render(request, 'search_results.html', {'results': results, 'query': query})
+    return render(request, 'results.html', {'tutor': tutor, 'takes': takes})

@@ -11,4 +11,7 @@ urlpatterns = [
     path('add_tutor', views.addTutor, name = 'add_tutor'),
     path('help', views.help, name = 'help'),
     path('search/', search, name='search'), 
+
+    path('update_level_logic', views.update_level_logic, name='update_level_logic'),
+    path('update_level',       views.update_level,       name='update_level'      ),
 ]
