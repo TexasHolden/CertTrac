@@ -16,12 +16,12 @@ def add_hours(name, course, date, in_person, a_sync):
         #Level 2 Tutors
         if tutor.level_1_completion_date and tutor.level_2_completion_date and tutor.level == 2:
             #Session taken after level 2 complete time added to post level 2
-            if date > tutor.level_2_completion_date: #Ask if level up and session on same day, do hours go to old level or new level?
+            if date >= tutor.level_2_completion_date: #Ask if level up and session on same day, do hours go to old level or new level?
                 tutor.post_level_2_hours = in_person + a_sync
                 tutor.save()
 
             #Session taken before level 2 complete and after level 1 complete time added to level 2
-            elif date > tutor.level_1_completion_date:
+            elif date >= tutor.level_1_completion_date:
                 tutor.level_2_hours_in_person = F('level_2_hours_in_person') + in_person
                 tutor.level_2_hours = F('level_2_hours') + in_person + a_sync
                 tutor.save()
@@ -35,7 +35,7 @@ def add_hours(name, course, date, in_person, a_sync):
         #Level 1 Tutors
         if tutor.level_1_completion_date and not tutor.level_2_completion_date and tutor.level == 1:
             #Session taken after level 1 completion time added to level 2
-            if date > tutor.level_1_completion_date:
+            if date >= tutor.level_1_completion_date:
                 tutor.level_2_hours_in_person = F('level_2_hours_in_person') + in_person
                 tutor.level_2_hours = F('level_2_hours') + in_person + a_sync
                 tutor.save()
@@ -57,7 +57,7 @@ def add_hours(name, course, date, in_person, a_sync):
             #Level 2 Tutors
             if tutor.level_1_completion_date and tutor.level_2_completion_date and tutor.level == 2:
                 #Session taken before level 2 complete and before level 1 complete time added to level 1
-                if date <= tutor.level_1_completion_date:
+                if date < tutor.level_1_completion_date:
                     tutor.level_1_hours_in_person = F('level_1_hours_in_person') + in_person
                     tutor.level_1_hours = F('level_1_hours') + in_person + a_sync
                     tutor.save()
@@ -66,7 +66,7 @@ def add_hours(name, course, date, in_person, a_sync):
             #Level 1 Tutors
             if tutor.level_1_completion_date and not tutor.level_2_completion_date and tutor.level == 1:
                 #Session taken before level 1 completion time added to level 1 
-                if date <= tutor.level_1_completion_date:
+                if date < tutor.level_1_completion_date:
                     tutor.level_1_hours_in_person = F('level_1_hours_in_person') + in_person
                     tutor.level_1_hours = F('level_1_hours') + in_person + a_sync
                     tutor.save()

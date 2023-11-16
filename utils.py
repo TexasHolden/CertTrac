@@ -23,8 +23,8 @@ def count_courses():
         count = (
             Takes.objects.filter(
                 tutor_id = tutor.id,
-                subtopic__topic = 'Basics',
-                subtopic__level = 1
+                session__subtopic__topic = 'Basics',
+                session__subtopic__level = 1
             )
             .values('subtopic__name')
             .annotate(course_count=Count('subtopic__name', distinct = True))
