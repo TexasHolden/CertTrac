@@ -2,3 +2,4 @@
 /certTracTermCode.ps1
 Scripts/
 *.pyc
+__pycache__/
