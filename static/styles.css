@@ -1,0 +1,183 @@
+/* Page background with gradient */
+body {
+  background: linear-gradient(to top left, #003366 3%, #e6f2ff 84%);
+  background-repeat: no-repeat;
+  background-attachment: fixed;
+  background-size: cover;
+  color: #333;
+  font-family: Arial, sans-serif;
+}
+
+/* Navigation bar styles */
+nav ul {
+  background-color: #00008B; /* Dark Blue */
+  overflow: hidden;
+  list-style-type: none;
+  padding: 0;
+  margin: 0;
+}
+
+nav ul li {
+  display: inline-block; /* Display links in a line */
+  margin-right: 4px; /* Spacing between nav items */
+  line-height: 50px; /* Align the links with the search box */
+}
+
+nav ul li a {
+  display: block;
+  color: #FFD700; /* Yellow-Gold */
+  text-align: center;
+  padding: 20px 16px;
+  text-decoration: none;
+  transition: all 0.3s; /* Smooth transition for hover effect */
+  font-family: 'Roboto', sans-serif; /* Modern font */
+  font-weight: 700; /* Bold text */
+  font-size: 16px; /* Font size for navigation links */
+  line-height: 30px; /* Adjust line height if necessary */
+}
+
+/* Hover effect for navigation links */
+nav ul li a:hover {
+  margin-top: -2px; /* Raises the text by 2px */
+  color: #FFFFFF; /* Change color on hover */
+}
+
+/* Active link styles */
+nav ul li a.active {
+  background-color: #0000CD; /* A lighter shade of dark blue */
+  box-shadow: 0 2px 2px -2px #0DFFD7; /* Adds a subtle shadow */
+}
+
+/* Search form in the navigation bar */
+nav form {
+  float: right; /* Aligns the search form to the right */
+  margin-top: 10px; /* Aligns vertically with the nav links */
+}
+
+nav form input[type="text"],
+nav form button {
+  margin-left: 4px;
+  padding: 5px 10px; /* Standardized padding for uniform size */
+  font-size: 15px; /* Font size */
+  border: 1px solid #ccc; /* Border for definition */
+  border-radius: 3px; /* Rounded corners for aesthetics */
+  box-sizing: border-box; /* Padding is included in the height */
+}
+
+/* Match the button styles to other buttons on the page */
+button, nav form button {
+  background-color: #f9f9f9; /* Background color */
+  color: #000000; /* Text color */
+  padding: 5px 10px; /* Padding to match the smaller button size */
+  border: 1px solid #ccc; /* Border color and width */
+  border-radius: 3px; /* Border radius for rounded corners */
+  cursor: pointer; /* Cursor to pointer on hover */
+  font-family: 'Roboto', sans-serif; /* Modern font */
+  font-weight: 700; /* Bold text */
+  line-height: normal; /* Line height for vertical centering */
+  box-sizing: border-box; /* Include padding and border in the element's total width and height */
+  display: inline-block; /* Display to inline-block for proper spacing */
+  margin-left: 4px; /* Margin to space out from other elements */
+}
+
+/* Adjust the text box styles to match other input elements on the page */
+input[type="text"], nav form input[type="text"] {
+  border: 1px solid #ccc; /* Border color and width */
+  border-radius: 3px; /* Border radius for rounded corners */
+  padding: 5px; /* Padding inside the text box */
+  font-family: Arial, sans-serif; /* Modern font */
+  font-size: 15px; /* Font size */
+  box-sizing: border-box; /* Include padding and border in the element's total width and height */
+  display: block; /* Display block for full width */
+  margin-bottom: 4px; /* Margin to space out from other elements */
+}
+
+/* Form styles */
+form {
+  max-width: 450px; /* Adjust width as needed */
+  margin: 0 auto; /* Centers the form horizontally */
+  padding: 6px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  background-color: #f9f9f9;
+}
+
+/* Label styles */
+label {
+  font-family: Arial, sans-serif;
+  font-weight: normal;
+  font-size: 14px; /* Slightly smaller than the navigation links */
+  display: block;
+  margin-bottom: 4px; /* Reduced space below each label */
+}
+
+/* Form row styles */
+.form-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 10px;
+}
+
+.form-row label {
+  flex: 1;
+  margin-right: 10px;
+}
+
+.form-row input, .form-row input[type="submit"] {
+  flex: 2;
+  padding: 5px;
+  border: 1px solid #ccc;
+  border-radius: 3px;
+  margin-bottom: 4px; /* Reduced space below each input field */
+}
+
+/* Checkbox specific styles */
+input[type="checkbox"] {
+  margin-right: 4px; /* Space to the right of each checkbox to align with the text */
+  vertical-align: middle; /* Aligns the checkbox vertically with the text */
+}
+
+label.checkbox-label {
+  display: inline-block; /* Align label in line with the checkbox */
+  margin-bottom: 0; /* Remove bottom margin for checkbox labels */
+  margin-right: 4px; /* Space after label before the checkbox */
+}
+
+/* Adjust the input text box styles to be closer to their labels */
+input[type="text"], input[type="date"], input[type="number"], input[type="email"], input[type="checkbox"], input[type="radio"] {
+  border: 1px solid #ccc;
+  border-radius: 3px;
+  padding: 5px;
+  font-size: 15px;
+  box-sizing: border-box;
+  display: block;
+  margin-top: 0; /* No space above input field */
+  margin-bottom: 4px; /* Consistent space below input field */
+}
+
+/* Checkbox and radio button adjustments */
+input[type="checkbox"], input[type="radio"] {
+  margin-right: 4px; /* Space to the right of the checkbox or radio button */
+  vertical-align: middle; /* Aligns the checkbox vertically with the text */
+}
+
+/* Match the button styles to other buttons on the page */
+button, input[type="button"], input[type="submit"], input[type="reset"] {
+  background-color: #f9f9f9;
+  color: #000000;
+  padding: 5px 10px;
+  border: 1px solid #ccc;
+  border-radius: 3px;
+  cursor: pointer;
+  font-family: 'Roboto', sans-serif;
+  font-weight: 700;
+  line-height: normal;
+  box-sizing: border-box;
+  display: inline-block;
+  margin-left: 4px;
+}
+
+.main-content {
+  padding-top: 60px; /* Adjust this value to match your navigation bar height */
+}

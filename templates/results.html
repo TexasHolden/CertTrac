@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Query Results</title>
+    <style>
+        .grid-container {
+            grid-template-columns: repeat(1, 1fr);
+            display:grid;
+            width:95%;
+            align-items: center;
+            margin-left:2.5%;
+            margin-right:2.5%;
+        }
+        /*
+        .grid-item {
+
+        }
+        */
+        table {
+            border-collapse: collapse;
+            /*width: 100%;
+            */
+            width:auto;
+        }
+
+        th, td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: left;
+        }
+
+        th {
+            background-color: #f2f2f2;
+        }
+
+        h1{
+            text-align: center;
+            color: #666666;
+        }
+
+        h2{
+            color: #3870a4;
+        }
+    </style>
+</head>
+<body>
+    <form method = "post" action = "{% url 'edit_tutor' %}">
+    {% csrf_token %}
+    <div class = "grid-container">
+    <h1>{{ tutor.first_name }}'s Information:</h1>
+    <h2>General Information:</h2>
+    <table>
+        <thead>
+            <th>First Name</th>
+            <th>Last Name</th>
+            <th>Email</th>
+            <th>Date Hired</th>
+            <th>Level</th>
+            <th>Level 1 Completion Date</th>
+            <th>Level 2 Completion Date</th>
+        </thead>
+        <tr>
+            <td>{{ tutor_form.first_name }}</td>
+            <td>{{ tutor_form.last_name }}</td>
+            <td>{{ tutor_form.email }}</td>
+            <td>{{ tutor_form.date_hired }}</td>
+            <td>{{ tutor_form.level }}</td>
+            <td>{{ tutor_form.level_1_completion_date }}</td>
+            <td>{{ tutor_form.level_2_completion_date }}</td>
+        </tr>
+        <tbody>
+        </tbody>
+    </table>
+    </div>
+    <br>
+    <hr>
+    <div class="grid-container">
+    
+    <h2>Number Level 1 Topics Completed:</h2>
+    <table>
+        <thead>
+            <th>Basics</th>
+            <th>Communication</th>
+            <th>Learning & Study Techinques</th>
+            <th>Ethics & Equality</th>
+            <th>Electives</th>
+        </thead>
+        <tbody>
+                <tr>
+                    <td>{{ tutor.number_basic_courses_completed_level_1 }}/4</td>
+                    <td>{{ tutor.number_communication_courses_completed_level_1 }}/2</td>
+                    <td>{{ tutor.number_learningstudytechinque_courses_completed_level_1 }}/2</td>
+                    <td>{{ tutor.number_ethicsequality_courses_completed_level_1 }}/1</td>
+                    <td>{{ tutor.number_elective_courses_completed_level_1 }}/1</td>
+                </tr>
+        </tbody>
+    </table>
+
+    <h2>Level 1 Training Hours Completed:</h2>
+    <table>
+        <thead>
+            <th>In-Person Hours</th>
+            <th>Total Hours</th>
+            <th>Logged 25 Hours</th>
+        </thead>
+        <tbody>
+                <tr>
+                    <td>{{ tutor.level_1_hours_in_person }}/5.00</td>
+                    <td>{{ tutor.level_1_hours }}/10.00</td>
+                    <td>{{ tutor_form.logged_25_hours_level_1 }}</td>
+                </tr>
+        </tbody>
+    </table>
+</div>
+<br>
+<hr>
+<div class="grid-container">
+<h2>Number Level 2 Topics Completed:</h2>
+    <table>
+        <thead>
+            <th>Review of Level 1</th>
+            <th>Basics</th>
+            <th>Communication</th>
+            <th>Learning & Study Techinques</th>
+            <th>Ethics & Equality</th>
+            <th>Electives</th>
+        </thead>
+        <tbody>
+                <tr>
+                    <td>{{ tutor_form.review_level_1_completed }}</td>
+                    <td>{{ tutor.number_basic_courses_completed_level_2 }}/3</td>
+                    <td>{{ tutor.number_communication_courses_completed_level_2 }}/2</td>
+                    <td>{{ tutor.number_learningstudytechinque_courses_completed_level_2 }}/3</td>
+                    <td>{{ tutor.number_ethicsequality_courses_completed_level_2 }}/1</td>
+                    <td>{{ tutor.number_elective_courses_completed_level_2 }}/1</td>
+                </tr>
+        </tbody>
+    </table>
+
+    <h2>Level 2 Training Hours Completed:</h2>
+    <table>
+        <thead>
+            <th>In-Person Hours</th>
+            <th>Total Hours</th>
+            <th>Logged 25 Hours</th>
+        </thead>
+        <tbody>
+                <tr>
+                    <td>{{ tutor.level_2_hours_in_person }}/5.00</td>
+                    <td>{{ tutor.level_2_hours }}/10.00</td>
+                    <td>{{ tutor_form.logged_25_hours_level_2 }}</td>
+                </tr>
+        </tbody>
+    </table>
+
+</div>
+<br>
+<hr>
+<div class="grid-container">
+
+    <h3>Post Level 2 Training Hours Completed:
+            {{ tutor.post_level_2_hours }}</td>
+    </h3>
+
+</div>
+<br>
+<hr>
+<div class="grid-container"></div>
+<button type="submit">Save</button>
+</form>
+
+    <h1>Sessions Completed:</h1>
+    <form method = post action = "{% url 'edit_takes' %}">
+    <table id="subTopicsTable">
+        <thead>
+            <tr>
+                <th>Level</th>
+                <th>Topic</th>
+                <th>Sub-Topic</th>
+                <th>Semester</th>
+                <th>Date</th>
+                <th>In-Person Traing Time</th>
+                <th>Asycnronous Training Time</th>
+            </tr>
+        </thead>
+        <tbody>
+            <!-- Loop through your data and display it in the table -->
+            {% csrf_token %}
+            {{ formset.management_form }}
+            {% for form in formset %}
+                <tr>
+                    <td style="display: none;">{{ form.id }}</td>
+                    <td>{{ form.instance.session.subtopic.level }}</td>
+                    <td>{{ form.instance.session.subtopic.topic }}</td>
+                    <td>{{ form.instance.session.subtopic.name }}</td>
+                    <td>{{ form.instance.session.semester }}</td>
+                    <td>{{ form.instance.date }}</td>
+                    <td>{{ form.instance.session.in_person_hours }}</td>
+                    <td>{{ form.instance.session.async_hours }}</td>
+                    <td>{{ form.DELETE }}</td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    <button type="submit">Save</button>
+    </form>
+</div>
+</body>
+
+<script>
+    function toggleTable() {
+        var x = document.getElementById("subTopicsTable");
+        if (x.style.display === "none") {
+            x.style.display = "table";
+        } else {
+            x.style.display = "none";
+        }
+    }
+</script>
+
+</html>

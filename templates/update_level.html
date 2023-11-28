@@ -1,0 +1,38 @@
+<!-- update_level_page.html -->
+
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Update Level</title>
+    <!-- Your head content here -->
+</head>
+<body>
+    <h1>Following Tutor/s Just Leveled Up!</h1>
+    
+    <form method="post" action="{% url 'update_level' %}">
+        {% csrf_token %}
+        {{ formset.management_form }}
+        <table>
+            <th>Name</th>
+            <th>Level 1 Completion Date</th>
+            <th>Level 2 Completion Date</th>
+            <th>New Level Achieved</th>
+            <th>Current Level (To Be Updated)</th>
+            {% for form in formset %}
+                {{ form.id }}
+                <tr>
+                    <td>{{ form.instance.first_name }} {{form.instance.last_name }}</td>
+                    <td>{{ form.level_1_completion_date }}</td>
+                    <td>{{ form.level_2_completion_date }}</td>
+                    <td>{{ form.level.value|add:"1" }} </td>
+                    <td>{{ form.level }}</td>
+                </tr>
+            {% endfor %}
+        </table>
+        <br>
+        <button type="submit">Submit</button>
+    </form>
+    
+
+</body>
+</html>

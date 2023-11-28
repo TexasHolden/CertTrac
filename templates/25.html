@@ -1,0 +1,20 @@
+{% extends 'base.html' %}
+
+{% block content %}
+  <title>25 Hours Log</title>
+  
+  <form method="post" action="{% url 'page25' %}">
+    {% csrf_token %}
+    <div class="form-row">
+      <label for="name">Name:</label>
+      <input type="text" id="name" name="name" required>
+    </div>
+
+    <div class="form-row">
+      <label for="date">Enter Date:</label>
+      <input type="date" id="date" name="date" required>
+    </div>
+
+    <button type="submit">Submit</button>
+  </form>
+{% endblock %}

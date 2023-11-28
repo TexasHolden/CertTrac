@@ -1,0 +1,33 @@
+{% extends 'base.html' %}
+
+{% block content %}
+  <title>User Input</title>
+
+  <form method="post" action="{% url 'add_hours' %}" id="inputHoursForm">
+    {% csrf_token %}
+    <div class="form-row">
+      <label for="name">Enter Names:</label>
+      <textarea id="names" name="names" required></textarea>
+    </div>
+
+    <div class="form-row">
+      <label for="course">Enter Subtopic:</label>
+      <input type="text" id="course" name="course" required>
+    </div>
+
+    <div class="form-row">
+      <label for="semester">Enter Semester:</label>
+      <input type="text" id="semester" name="semester" required>
+    </div>
+
+    <div class="form-row">
+      <label for="date">Enter Date:</label>
+      <input type="date" id="date" name="date" required>
+    </div>
+
+    <button type="submit">Submit</button>
+  </form>
+  
+{% endblock %}
+
+

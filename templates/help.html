@@ -1,0 +1,58 @@
+{% extends 'base.html' %}
+
+{% block content %}
+    <title>help</title>
+
+        <head>
+            <title>System Functionalities Help</title>
+          </head>
+          <body>
+          
+          <h2>Add Session:</h2>
+          <p>
+            Before logging tutor hours, ensure session details, tutors, and subtopics are in the database. Multiple tutors can contribute to a single session. Their hours from the corresponding session will be added to their individual completed hours. This action simultaneously adds a new entry to the tutor's completed session table, which can be accessed when searching for a tutor.
+          </p>
+          <p>
+            Additionally, this function includes the ability to add "Review of Level 1." Besides adding hours, selecting this option will also set the "Review of Level 1" attribute in the tutor's profile to the inputted date. This attribute signifies the tutor's completion of Level 1 requirements. Errors will occur if tutors or subtopics are not in the database.
+          </p>
+          <p>
+            The sessions logged within the system are viewable and editable. Users can access and modify session details, including hours, dates, and associated tutors. This flexibility ensures accurate record-keeping and allows for updates or corrections to session information when necessary.
+          </p>
+          
+          <h2>Add Team Meeting:</h2>
+          <p>
+            Record the name, subtopic, semester conducted, in-person, and asynchronous hours linked to team meetings. Ensure the subtopic is present in the database to avoid errors. Additionally, any notes or specific details regarding the session can be included in the semester field. This function serves as a pivotal connection between the tutor's training hours and their progression within the system. Team meetings are where tutors earn their training hours. Ensuring accurate recording of these meetings is crucial for tracking a tutor's progress and training completion.
+          </p>
+          <p>
+            It also checks that all conditions are present for a tutor to level up. If they are, a pop out will appear prompting an input for a date to signify that tutor’s level completion date.
+          </p>
+          <p>
+            The team meetings logged within the system are viewable and editable. Users can access and modify meeting details, including hours, dates, and associated topics. This flexibility ensures accurate record-keeping and allows for updates or corrections to meeting information when necessary.
+          </p>
+          
+          <h2>Add Logged Hours:</h2>
+          <p>
+            To add 25 hours, ensure the tutor is in the database. If both level 1 and 2 are filled and an attempt is made to add a third date, an error will occur. Similarly, if attempting to add hours beyond the level requirements, it will prompt an error or warning.
+          </p>
+          
+          <h2>Add Tutors:</h2>
+          <p>
+            Input first name, last name, email, and hiring date to integrate new tutors into the system upon their hiring. Upon creation, the tutor's hours will be set to 0, all dates will be NULL, and the number of topics completed per level will be 0. This establishes a starting point for the tutor's data within the system.
+          </p>
+          
+          <h2>Search:</h2>
+          <p>
+            Enter a tutor's name to access their information and completed sessions. This feature leads to two tables: one containing tutor details and another containing all completed sessions by the specified tutor.
+          </p>
+          <p>
+            Within the search results:
+            <ul>
+              <li><strong>Edit Tutor Information:</strong> Access and modify tutor completion dates, name, date hired, and email directly from the search results.</li>
+              <li><strong>Delete Entries:</strong> Remove specific entries from the tutor's completed session table. This action triggers updates for their accumulated hours and the number of completed topics per level, ensuring accurate and updated progress tracking.</li>
+            </ul>
+          </p>
+          
+          </body>
+    {% endblock %}
+
+</head>

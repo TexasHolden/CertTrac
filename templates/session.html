@@ -1,0 +1,78 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+{% csrf_token %}
+
+<form method="post" action="{% url 'session' %}">
+    {% csrf_token %}
+    <div class="form-row">
+        <label for="course">Enter Subtopic: </label>
+        <input type="text" id="course" name="course" required>
+    </div>
+
+    <div class="form-row">
+        <label for="semester">Enter Semester: </label>
+        <input type="text" id="semester" name="semester" required>
+    </div>
+
+    <div class="form-row">
+        <label for="hours">Enter In-Person Hours:</label>
+        <input type="number" id="hours" name="hours" step="0.01" required>
+    </div>
+
+    <div class="form-row">
+        <label for="asynchronous_hours">Enter Asynchronous Hours:</label>
+        <input type="number" id="asynchronous_hours" name="asynchronous_hours" step="0.01" required>
+    </div>
+
+    <button type="submit">Submit</button>
+</form>
+
+    <br>
+
+<h1> Past Team Meetings </h1>
+
+<style>
+    table {
+        border-collapse: collapse;
+        width: 100%;
+    }
+
+    th, td {
+        border: 1px solid #000;
+        padding: 8px;
+        text-align: left;
+    }
+
+    th {
+        background-color: #f2f2f2;
+    }
+
+</style>
+
+<form method = "post" action = "{% url 'session_' %}">
+    {% csrf_token %}
+    {{ formset.management_form }}
+
+    <table>
+        <th>Subtopic</th>
+        <th>Semester</th>
+        <th>In Person Hours</th>
+        <th>Asynchronous Hours</th>
+        <th>Save Session</th>
+        {% for form in formset %}
+            {{ form.id }}
+            <tr>
+                <td>{{ form.subtopic }}</td>
+                <td>{{ form.semester }}</td>
+                <td>{{ form.in_person_hours}}</td>
+                <td>{{ form.async_hours }}</td>
+                <!--<td>{{ form.DELETE }}</td>-->
+                <td><button type="submit">Save</button></td>
+            </tr>
+    {% endfor %}
+    </table>
+</form>
+
+{% endblock %}
