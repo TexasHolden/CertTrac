@@ -94,7 +94,7 @@ input[type="text"], nav form input[type="text"] {
 
 /* Form styles */
 form {
-  max-width: 450px; /* Adjust width as needed */
+  max-width: min-content; /* Adjust width as needed */
   margin: 0 auto; /* Centers the form horizontally */
   padding: 6px;
   border: 1px solid #ccc;

@@ -1,5 +1,7 @@
 <!DOCTYPE html>
 <html>
+    {% load static %}
+    <link rel="stylesheet" type="text/css" href="{% static 'styles.css' %}">
 <head>
     <title>Query Results</title>
     <style>
@@ -44,6 +46,23 @@
     </style>
 </head>
 <body>
+    <nav>
+        <ul>
+          <li><a href="{% url 'team_meetings' %}" class="{% if request.resolver_match.url_name == 'team_meetings' %}active{% endif %}">Add Team Meeting</a></li>
+          <li><a href="{% url 'add_hours' %}" class="{% if request.resolver_match.url_name == 'add_hours' %}active{% endif %}">Add Tutor Hours</a></li>
+          <li><a href="{% url 'page25' %}" class="{% if request.resolver_match.url_name == 'page25' %}active{% endif %}">Add 25 Logged Hours</a></li>
+          <li><a href="{% url 'add_tutor' %}" class="{% if request.resolver_match.url_name == 'add_tutor' %}active{% endif %}">Add Tutors</a></li>
+          <li><a href="{% url 'help' %}" class="{% if request.resolver_match.url_name == 'help' %}active{% endif %}">Help</a></li>
+          <!-- Search form -->
+          <li style="float: right;">
+            <form action="{% url 'search' %}" method="get">
+              <input type="text" name="q" placeholder="Search...">
+              <button type="submit">Search</button>
+            </form>
+          </li>
+        </ul>
+      </nav>
+      
     <form method = "post" action = "{% url 'edit_tutor' %}">
     {% csrf_token %}
     <div class = "grid-container">

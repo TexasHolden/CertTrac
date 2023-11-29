@@ -1,12 +1,9 @@
 <!-- update_level_page.html -->
+{% extends 'base.html' %}
 
-<!DOCTYPE html>
-<html>
-<head>
-    <title>Update Level</title>
-    <!-- Your head content here -->
-</head>
-<body>
+{% block content %}
+
+
     <h1>Following Tutor/s Just Leveled Up!</h1>
     
     <form method="post" action="{% url 'update_level' %}">
@@ -33,6 +30,6 @@
         <button type="submit">Submit</button>
     </form>
     
+{% endblock %}
 
-</body>
-</html>
+
